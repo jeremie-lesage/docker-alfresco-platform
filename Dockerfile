@@ -64,6 +64,6 @@ COPY assets/server.xml conf/server.xml
 COPY assets/web.xml webapps/alfresco/WEB-INF/web.xml
 COPY assets/alfresco-global.properties webapps/alfresco/classes/alfresco-global.properties
 
-
+ENV JAVA_OPTS: " -XX:-DisableExplicitGC -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Dfile.encoding=UTF-8 "
 
 VOLUME "/opt/alf_data/"
