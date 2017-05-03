@@ -23,7 +23,8 @@ RUN set -x \
       && apt-get clean \
       && rm -rf /var/lib/apt/lists/*
 
-ARG ALF_VERSION
+ENV ALF_VERSION=5.2.f \
+    ALF_SHARE_SERVICE=5.2.e
 
 ## ALFRESCO.WAR
 RUN set -x && \
@@ -40,8 +41,6 @@ RUN set -x && \
     curl --silent --location \
       ${NEXUS}/postgresql/postgresql/${PG_LIB_VERSION}/postgresql-${PG_LIB_VERSION}.jar \
       -o lib/postgresql-${PG_LIB_VERSION}.jar
-
-ARG ALF_SHARE_SERVICE
 
 ## AMP - ALFRESCO SHARE SERVICE
 RUN set -x && \
