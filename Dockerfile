@@ -46,7 +46,9 @@ RUN set -x && \
 RUN set -x && \
     curl --silent --location \
       ${NEXUS}/org/alfresco/alfresco-share-services/${ALF_SHARE_SERVICE}/alfresco-share-services-${ALF_SHARE_SERVICE}.amp \
-      -o /root/amp/alfresco-share-services-${ALF_SHARE_SERVICE}.amp
+      -o /root/amp/alfresco-share-services-${ALF_SHARE_SERVICE}.amp && \
+    java -jar /root/alfresco-mmt.jar install /root/amp/ webapps/alfresco -nobackup -directory && \
+    rm /root/amp/alfresco-share-services-${ALF_SHARE_SERVICE}.amp
 
 RUN set -x && \
     sed -i 's|^log4j.appender.File.File=.*$|log4j.appender.File.File=/usr/local/tomcat/logs/alfresco.log|' webapps/alfresco/WEB-INF/classes/log4j.properties && \
@@ -59,11 +61,15 @@ RUN set -x && \
               webapps/manager \
               webapps/host-manager
 
+
+
 COPY assets/catalina.properties conf/catalina.properties
 COPY assets/server.xml conf/server.xml
 COPY assets/web.xml webapps/alfresco/WEB-INF/web.xml
 COPY assets/alfresco-global.properties webapps/alfresco/WEB-INF/classes/alfresco-global.properties
 
 ENV JAVA_OPTS: " -XX:-DisableExplicitGC -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Dfile.encoding=UTF-8 "
+
+WORKDIR /root
 
 VOLUME "/opt/alf_data/"
