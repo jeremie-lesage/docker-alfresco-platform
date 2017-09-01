@@ -34,7 +34,6 @@ RUN set -x && \
     unzip -q alfresco-platform-${ALF_VERSION}.war -d webapps/alfresco && \
     rm alfresco-platform-${ALF_VERSION}.war
 
-
 ## JDBC - POSTGRESQL
 ENV PG_LIB_VERSION=9.2-1002.jdbc4
 RUN set -x && \
@@ -51,7 +50,7 @@ RUN set -x && \
     rm /root/amp/alfresco-share-services-${ALF_SHARE_SERVICE}.amp
 
 RUN set -x && \
-    sed -i 's|^log4j.appender.File.File=.*$|log4j.appender.File.File=/usr/local/tomcat/logs/alfresco.log|' webapps/alfresco/WEB-INF/classes/log4j.properties && \
+    sed -i 's/^log4j.rootLogger.*/log4j.rootLogger=error, Console/' webapps/alfresco/WEB-INF/classes/log4j.properties && \
     mkdir -p  shared/classes/alfresco/extension \
               shared/classes/alfresco/messages \
               shared/lib \
@@ -65,6 +64,7 @@ RUN set -x && \
 
 COPY assets/catalina.properties conf/catalina.properties
 COPY assets/server.xml conf/server.xml
+COPY assets/logging.properties conf/logging.properties
 COPY assets/web.xml webapps/alfresco/WEB-INF/web.xml
 COPY assets/alfresco-global.properties webapps/alfresco/WEB-INF/classes/alfresco-global.properties
 
