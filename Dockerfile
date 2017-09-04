@@ -1,11 +1,11 @@
-FROM tomcat:7.0.77-jre8
+FROM tomcat:7.0.81-jre8
 MAINTAINER Jeremie Lesage <jeremie.lesage@gmail.com>
 
 ENV NEXUS=https://artifacts.alfresco.com/nexus/content/groups/public
 
 WORKDIR /usr/local/tomcat/
 
-ENV MMT_VERSION=5.2.f
+ENV MMT_VERSION=5.2.g
 
 ## JAR - ALFRESCO MMT
 RUN set -x && \
@@ -23,8 +23,8 @@ RUN set -x \
       && apt-get clean \
       && rm -rf /var/lib/apt/lists/*
 
-ENV ALF_VERSION=5.2.f \
-    ALF_SHARE_SERVICE=5.2.e
+ENV ALF_VERSION=5.2.g \
+    ALF_SHARE_SERVICE=5.2.f
 
 ## ALFRESCO.WAR
 RUN set -x && \
