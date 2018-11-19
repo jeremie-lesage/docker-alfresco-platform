@@ -5,7 +5,7 @@ ENV NEXUS=https://artifacts.alfresco.com/nexus/content/groups/public
 
 WORKDIR /usr/local/tomcat/
 
-ENV MMT_VERSION=5.1.g
+ENV MMT_VERSION=5.0.d
 
 ## JAR - ALFRESCO MMT
 RUN set -x && \
@@ -23,16 +23,15 @@ RUN set -x \
       && apt-get clean \
       && rm -rf /var/lib/apt/lists/*
 
-ENV ALF_VERSION=5.1.g \
-    ALF_SHARE_SERVICE=5.1.g
+ENV ALF_VERSION=5.0.d
 
 ## ALFRESCO.WAR
 RUN set -x && \
     curl --silent --location \
-      ${NEXUS}/org/alfresco/alfresco-platform/${ALF_VERSION}/alfresco-platform-${ALF_VERSION}.war \
-      -o alfresco-platform-${ALF_VERSION}.war && \
-    unzip -q alfresco-platform-${ALF_VERSION}.war -d webapps/alfresco && \
-    rm alfresco-platform-${ALF_VERSION}.war
+      ${NEXUS}/org/alfresco/alfresco/${ALF_VERSION}/alfresco-${ALF_VERSION}.war \
+      -o alfresco-${ALF_VERSION}.war && \
+    unzip -q alfresco-${ALF_VERSION}.war -d webapps/alfresco && \
+    rm alfresco-${ALF_VERSION}.war
 
 
 ## JDBC - POSTGRESQL
@@ -41,14 +40,6 @@ RUN set -x && \
     curl --silent --location \
       ${NEXUS}/postgresql/postgresql/${PG_LIB_VERSION}/postgresql-${PG_LIB_VERSION}.jar \
       -o lib/postgresql-${PG_LIB_VERSION}.jar
-
-## AMP - ALFRESCO SHARE SERVICE
-RUN set -x && \
-    curl --silent --location \
-      ${NEXUS}/org/alfresco/alfresco-share-services/${ALF_SHARE_SERVICE}/alfresco-share-services-${ALF_SHARE_SERVICE}.amp \
-      -o /root/amp/alfresco-share-services-${ALF_SHARE_SERVICE}.amp && \
-    java -jar /root/alfresco-mmt.jar install /root/amp/ webapps/alfresco -nobackup -directory && \
-    rm /root/amp/alfresco-share-services-${ALF_SHARE_SERVICE}.amp
 
 RUN set -x && \
     sed -i 's|^log4j.appender.File.File=.*$|log4j.appender.File.File=/usr/local/tomcat/logs/alfresco.log|' webapps/alfresco/WEB-INF/classes/log4j.properties && \
@@ -60,8 +51,6 @@ RUN set -x && \
               webapps/examples \
               webapps/manager \
               webapps/host-manager
-
-
 
 COPY assets/catalina.properties conf/catalina.properties
 COPY assets/server.xml conf/server.xml
