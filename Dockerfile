@@ -1,4 +1,4 @@
-FROM tomcat:7.0.81-jre8
+FROM tomcat:7.0.92-jre8
 MAINTAINER Jeremie Lesage <jeremie.lesage@gmail.com>
 
 ENV NEXUS=https://artifacts.alfresco.com/nexus/content/groups/public
