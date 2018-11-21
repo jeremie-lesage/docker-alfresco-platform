@@ -6,16 +6,16 @@ ENV NEXUS=https://artifacts.alfresco.com/nexus/content/groups/public
 WORKDIR /usr/local/tomcat/
 
 ENV MMT_VERSION=5.0.d
+ENV ALF_VERSION=5.0.d
 
 ## JAR - ALFRESCO MMT
-RUN set -x && \
+RUN set -ex && \
     curl --silent --location \
       ${NEXUS}/org/alfresco/alfresco-mmt/${MMT_VERSION}/alfresco-mmt-${MMT_VERSION}.jar \
       -o /root/alfresco-mmt.jar && \
       mkdir /root/amp
 
-
-RUN set -x \
+RUN set -ex \
       && apt-get update \
       && apt-get install -y --no-install-recommends \
                   imagemagick \
@@ -23,10 +23,8 @@ RUN set -x \
       && apt-get clean \
       && rm -rf /var/lib/apt/lists/*
 
-ENV ALF_VERSION=5.0.d
-
 ## ALFRESCO.WAR
-RUN set -x && \
+RUN set -ex && \
     curl --silent --location \
       ${NEXUS}/org/alfresco/alfresco/${ALF_VERSION}/alfresco-${ALF_VERSION}.war \
       -o alfresco-${ALF_VERSION}.war && \
@@ -36,12 +34,12 @@ RUN set -x && \
 
 ## JDBC - POSTGRESQL
 ENV PG_LIB_VERSION=9.2-1002.jdbc4
-RUN set -x && \
+RUN set -ex && \
     curl --silent --location \
       ${NEXUS}/postgresql/postgresql/${PG_LIB_VERSION}/postgresql-${PG_LIB_VERSION}.jar \
       -o lib/postgresql-${PG_LIB_VERSION}.jar
 
-RUN set -x && \
+RUN set -ex && \
     sed -i 's|^log4j.appender.File.File=.*$|log4j.appender.File.File=/usr/local/tomcat/logs/alfresco.log|' webapps/alfresco/WEB-INF/classes/log4j.properties && \
     mkdir -p  shared/classes/alfresco/extension \
               shared/classes/alfresco/messages \
